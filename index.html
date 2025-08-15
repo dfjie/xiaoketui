@@ -18,6 +18,24 @@
         body.header-visible {
             padding-top: 72px; /* Corresponds to header height */
         }
+        /* Modal and dropdown styles */
+        .modal-overlay, .dropdown-menu {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .project-row {
+            cursor: pointer;
+        }
+        /* Smooth transition for form visibility */
+        .form-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        .form-container.visible {
+            max-height: 1000px; /* Adjust as needed */
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -29,38 +47,55 @@
                 <div class="flex items-center">
                     <img src="https://placehold.co/40x40/6366f1/ffffff?text=LOGO" alt="小客推 Logo" class="h-10 w-10 mr-3 rounded-full">
                     <span class="text-2xl font-bold text-gray-800">小客推</span>
+                
+                    <!-- Desktop Navigation -->
+                    <nav class="hidden md:flex items-center space-x-6 ml-10">
+                        <a href="#" data-page="project-owner" class="nav-link text-gray-600 hover:text-blue-600">我的项目</a>
+                        <a href="#" data-page="points" class="nav-link text-gray-600 hover:text-blue-600">我的积分</a>
+                        <a href="#" data-page="internal-management" class="nav-link text-gray-600 hover:text-blue-600">内部管理</a>
+                        <a href="#" data-page="list-system" class="nav-link text-gray-600 hover:text-blue-600">List系统</a>
+                    </nav>
                 </div>
-                <!-- Desktop Navigation -->
-                <nav class="hidden md:flex space-x-6">
-                    <a href="#" data-page="project-owner" class="nav-link text-gray-600 hover:text-blue-600">项目管理</a>
-                    <a href="#" data-page="points" class="nav-link text-gray-600 hover:text-blue-600">我的积分</a>
-                    <a href="#" data-page="internal-management" class="nav-link text-gray-600 hover:text-blue-600">内部管理</a>
-                    <a href="#" data-page="list-system" class="nav-link text-gray-600 hover:text-blue-600">List系统</a>
-                    <a href="#" data-page="login" class="nav-link text-gray-600 hover:text-blue-600">退出</a>
-                </nav>
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-600 hover:text-gray-800 focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
-                    </button>
+                
+                <div class="flex items-center">
+                    <!-- User Avatar Dropdown -->
+                    <div class="relative hidden md:block">
+                        <button id="avatar-button" class="block rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                             <span class="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-200">
+                                <svg class="h-full w-full text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </span>
+                        </button>
+                        <div id="avatar-dropdown" class="dropdown-menu hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 transform scale-95">
+                            <a href="#" data-page="login" class="nav-link block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">退出登录</a>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden ml-4">
+                        <button id="mobile-menu-button" class="text-gray-600 hover:text-gray-800 focus:outline-none">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Mobile Navigation Menu -->
         <div id="mobile-menu" class="md:hidden hidden">
             <nav class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#" data-page="project-owner" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">项目管理</a>
+                <a href="#" data-page="project-owner" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">我的项目</a>
                 <a href="#" data-page="points" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">我的积分</a>
                 <a href="#" data-page="internal-management" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">内部管理</a>
                 <a href="#" data-page="list-system" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">List系统</a>
-                <a href="#" data-page="login" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">退出</a>
+                <a href="#" data-page="login" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-white hover:bg-blue-600">退出登录</a>
             </nav>
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
         <!-- Page: Login & Registration -->
         <section id="login-page" class="page-section">
             <div class="flex items-center justify-center min-h-screen bg-gray-100 px-4">
@@ -110,74 +145,87 @@
             </div>
         </section>
 
-        <!-- Page: Project Owner Dashboard -->
+        <!-- Page: My Projects -->
         <section id="project-owner-page" class="page-section hidden-page">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Project Owner 仪表板</h1>
-                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-8">
-                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">登记新项目</h2>
-                    <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="po-company-name" class="block text-sm font-medium text-gray-700">公司名称</label>
-                            <input type="text" id="po-company-name" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="po-project-name" class="block text-sm font-medium text-gray-700">项目名称</label>
-                            <input type="text" id="po-project-name" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="po-budget" class="block text-sm font-medium text-gray-700">预算金额 (元)</label>
-                            <input type="number" id="po-budget" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="po-project-type" class="block text-sm font-medium text-gray-700">项目类型</label>
-                            <select id="po-project-type" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                                <option>直播</option>
-                                <option>手术直播</option>
-                                <option>50万以下线下会议</option>
-                                <option>50万-100万线下会议</option>
-                                <option>100万以上线下会议</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="po-start-date" class="block text-sm font-medium text-gray-700">项目开始时间</label>
-                            <input type="date" id="po-start-date" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="po-end-date" class="block text-sm font-medium text-gray-700">项目结束时间</label>
-                            <input type="date" id="po-end-date" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div class="md:col-span-2 text-right">
-                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">提交登记</button>
-                        </div>
-                    </form>
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-0">我的项目</h1>
+                    <button id="toggle-new-project-form-btn" class="w-full sm:w-auto bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition duration-300 font-semibold flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        登记新项目
+                    </button>
                 </div>
+                
+                <!-- New Project Form Container -->
+                <div id="new-project-form-container" class="form-container">
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-8">
+                        <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">登记新项目</h2>
+                        <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="po-company-name" class="block text-sm font-medium text-gray-700">公司名称</label>
+                                <input type="text" id="po-company-name" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="po-project-name" class="block text-sm font-medium text-gray-700">项目名称</label>
+                                <input type="text" id="po-project-name" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="po-budget" class="block text-sm font-medium text-gray-700">预算金额 (元)</label>
+                                <input type="number" id="po-budget" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="po-project-type" class="block text-sm font-medium text-gray-700">项目类型</label>
+                                <select id="po-project-type" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                    <option>直播</option>
+                                    <option>手术直播</option>
+                                    <option>50万以下线下会议</option>
+                                    <option>50万-100万线下会议</option>
+                                    <option>100万以上线下会议</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="po-start-date" class="block text-sm font-medium text-gray-700">项目开始时间</label>
+                                <input type="date" id="po-start-date" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="po-end-date" class="block text-sm font-medium text-gray-700">项目结束时间</label>
+                                <input type="date" id="po-end-date" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="md:col-span-2 text-right">
+                                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">提交登记</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
                     <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">我的项目列表</h2>
-                    <p class="text-gray-500 mb-6">此列表中的项目仅对您可见。</p>
+                    <p class="text-gray-500 mb-6">此列表中的项目仅对您可见。点击项目行可查看详情。</p>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">项目名称</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">类型</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预算</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预算金额</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">开始日期</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">结束日期</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
+                                <tr class="project-row hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">A公司年度医学峰会</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">100万以上线下会议</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥1,200,000</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-09-15</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-09-20</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">进行中</span></td>
                                 </tr>
-                                <tr>
+                                <tr class="project-row hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">B医院心脏手术直播</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">手术直播</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥300,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-08-20</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-08-20</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">已完成</span></td>
                                 </tr>
@@ -188,12 +236,160 @@
             </div>
         </section>
 
-        <!-- Page: Internal Management -->
+        <!-- Page: Internal Management (Project List) -->
         <section id="internal-management-page" class="page-section hidden-page">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">内部项目管理</h1>
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-0">内部项目管理</h1>
+                    <button id="add-new-project-btn" class="w-full sm:w-auto bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition duration-300 font-semibold flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        新增项目
+                    </button>
+                </div>
                 <div class="mb-8">
-                    <input type="text" placeholder="通过关键字或编码搜索项目..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    <input id="project-search-input" type="text" placeholder="通过关键字或编码搜索项目..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">所有项目</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">项目名称</th>
+                                    <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预算金额</th>
+                                    <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">开始日期</th>
+                                    <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">结束日期</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="internal-project-list" class="bg-white divide-y divide-gray-200">
+                                <tr class="project-row hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">A公司年度医学峰会</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥1,200,000</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-09-15</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-09-20</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">进行中</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <button class="edit-btn text-blue-600 hover:text-blue-900">编辑</button>
+                                        <button class="delete-btn text-red-600 hover:text-red-900">删除</button>
+                                    </td>
+                                </tr>
+                                <tr class="project-row hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">B医院心脏手术直播</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥300,000</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-08-20</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-08-20</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">已完成</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <button class="edit-btn text-blue-600 hover:text-blue-900">编辑</button>
+                                        <button class="delete-btn text-red-600 hover:text-red-900">删除</button>
+                                    </td>
+                                </tr>
+                                <tr class="project-row hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">C公司新品发布会</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥800,000</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-10-01</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-10-01</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">待审核</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <button class="edit-btn text-blue-600 hover:text-blue-900">编辑</button>
+                                        <button class="delete-btn text-red-600 hover:text-red-900">删除</button>
+                                    </td>
+                                </tr>
+                                <tr class="project-row hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">D公司技术研讨会</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥450,000</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-11-05</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-11-06</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">进行中</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <button class="edit-btn text-blue-600 hover:text-blue-900">编辑</button>
+                                        <button class="delete-btn text-red-600 hover:text-red-900">删除</button>
+                                    </td>
+                                </tr>
+                                <tr class="project-row hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">E医疗集团培训直播</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥150,000</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-07-15</td>
+                                    <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-07-15</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">已取消</span></td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <button class="edit-btn text-blue-600 hover:text-blue-900">编辑</button>
+                                        <button class="delete-btn text-red-600 hover:text-red-900">删除</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Page: Add New Project -->
+        <section id="add-project-page" class="page-section hidden-page">
+             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="mb-6">
+                    <button class="back-to-list-btn text-blue-600 hover:text-blue-800 font-semibold flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        返回项目列表
+                    </button>
+                </div>
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">登记新项目</h2>
+                    <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="new-company-name" class="block text-sm font-medium text-gray-700">公司名称</label>
+                            <input type="text" id="new-company-name" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="new-project-name" class="block text-sm font-medium text-gray-700">项目名称</label>
+                            <input type="text" id="new-project-name" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="new-budget" class="block text-sm font-medium text-gray-700">预算金额 (元)</label>
+                            <input type="number" id="new-budget" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="new-project-type" class="block text-sm font-medium text-gray-700">项目类型</label>
+                            <select id="new-project-type" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                                <option>直播</option>
+                                <option>手术直播</option>
+                                <option>50万以下线下会议</option>
+                                <option>50万-100万线下会议</option>
+                                <option>100万以上线下会议</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="new-start-date" class="block text-sm font-medium text-gray-700">项目开始时间</label>
+                            <input type="date" id="new-start-date" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="new-end-date" class="block text-sm font-medium text-gray-700">项目结束时间</label>
+                            <input type="date" id="new-end-date" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div class="md:col-span-2 text-right">
+                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">提交登记</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page: Internal Project Details -->
+        <section id="internal-detail-page" class="page-section hidden-page">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="mb-6">
+                    <button class="back-to-list-btn text-blue-600 hover:text-blue-800 font-semibold flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        返回项目列表
+                    </button>
                 </div>
                 <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
                     <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">项目详情: A公司年度医学峰会</h2>
@@ -226,7 +422,7 @@
         <!-- Page: Points Dashboard -->
         <section id="points-page" class="page-section hidden-page">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">贡献积分</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">我的积分</h1>
                 <p class="text-gray-500 mb-6">积分需在项目回款后方可提取。</p>
                 <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center">
                     <div class="mb-4 sm:mb-0">
@@ -308,6 +504,18 @@
             </div>
         </section>
     </main>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden opacity-0">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">确认删除</h3>
+            <p class="text-gray-600 mb-6">您确定要删除这个项目吗？此操作无法撤销。</p>
+            <div class="flex justify-end space-x-4">
+                <button id="cancel-delete-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">取消</button>
+                <button id="confirm-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">确认删除</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -318,6 +526,25 @@
             const loginForm = document.getElementById('login-form');
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
+            const mainContent = document.getElementById('main-content');
+            const addNewProjectBtn = document.getElementById('add-new-project-btn');
+            const toggleNewProjectFormBtn = document.getElementById('toggle-new-project-form-btn');
+            const newProjectFormContainer = document.getElementById('new-project-form-container');
+            
+            // Avatar Dropdown Elements
+            const avatarButton = document.getElementById('avatar-button');
+            const avatarDropdown = document.getElementById('avatar-dropdown');
+
+            // Delete Modal Elements
+            const deleteModal = document.getElementById('delete-modal');
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+            let rowToDelete = null;
+
+            // Search functionality
+            const searchInput = document.getElementById('project-search-input');
+            const projectList = document.getElementById('internal-project-list');
+            const projectRows = projectList.getElementsByClassName('project-row');
 
             // Function to switch pages
             function showPage(pageId) {
@@ -350,15 +577,63 @@
                     }
                 });
                 
+                // Update active nav link for mobile
+                mobileNavLinks.forEach(link => {
+                    if (link.dataset.page === pageId) {
+                        link.classList.add('bg-blue-600', 'text-white');
+                        link.classList.remove('text-gray-700');
+                    } else {
+                        link.classList.remove('bg-blue-600', 'text-white');
+                        link.classList.add('text-gray-700');
+                    }
+                });
+                
                 // Close mobile menu after navigation
                 mobileMenu.classList.add('hidden');
+                window.scrollTo(0, 0); // Scroll to top on page change
             }
 
             // --- Event Listeners ---
+            
+            // Main content event delegation for buttons
+            mainContent.addEventListener('click', function(e) {
+                const target = e.target;
+                const projectRow = target.closest('.project-row');
+
+                // Click on a project row
+                if (projectRow) {
+                    // Check if the click was on a button inside the row
+                    if (target.closest('.edit-btn') || target.closest('.delete-btn')) {
+                        return; // Do nothing if a button was clicked
+                    }
+                    showPage('internal-detail');
+                    return;
+                }
+                
+                // Back to List Button
+                if (target.classList.contains('back-to-list-btn') || target.closest('.back-to-list-btn')) {
+                    showPage('internal-management');
+                }
+                
+                // Delete Button
+                if (target.classList.contains('delete-btn')) {
+                    rowToDelete = target.closest('tr');
+                    deleteModal.classList.remove('hidden');
+                    setTimeout(() => deleteModal.classList.remove('opacity-0'), 10);
+                }
+            });
 
             // Desktop navigation
-            document.querySelector('.hidden.md\\:flex').addEventListener('click', function(e) {
+            document.querySelector('nav.hidden.md\\:flex').addEventListener('click', function(e) {
                 if (e.target.matches('.nav-link')) {
+                    e.preventDefault();
+                    showPage(e.target.dataset.page);
+                }
+            });
+            
+            // Avatar dropdown navigation
+            avatarDropdown.addEventListener('click', function(e) {
+                 if (e.target.matches('.nav-link')) {
                     e.preventDefault();
                     showPage(e.target.dataset.page);
                 }
@@ -375,13 +650,82 @@
             // Login form submission
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                // In a real app, you would validate credentials here
-                showPage('project-owner'); // Navigate to the dashboard after login
+                showPage('project-owner');
             });
 
             // Mobile menu toggle
             mobileMenuButton.addEventListener('click', function() {
                 mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Add New Project Button (from internal management)
+            addNewProjectBtn.addEventListener('click', function() {
+                showPage('add-project');
+            });
+            
+            // Toggle New Project Form Button (on my projects page)
+            toggleNewProjectFormBtn.addEventListener('click', function() {
+                newProjectFormContainer.classList.toggle('visible');
+            });
+
+            // --- Avatar Dropdown Logic ---
+            avatarButton.addEventListener('click', function() {
+                const isHidden = avatarDropdown.classList.contains('hidden');
+                if (isHidden) {
+                    avatarDropdown.classList.remove('hidden');
+                    setTimeout(() => {
+                        avatarDropdown.classList.remove('opacity-0', 'scale-95');
+                    }, 10);
+                } else {
+                    avatarDropdown.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        avatarDropdown.classList.add('hidden');
+                    }, 300);
+                }
+            });
+
+            // Close dropdown when clicking outside
+            window.addEventListener('click', function(e) {
+                if (!avatarButton.contains(e.target) && !avatarDropdown.contains(e.target)) {
+                    avatarDropdown.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        avatarDropdown.classList.add('hidden');
+                    }, 300);
+                }
+            });
+
+            // --- Delete Modal Logic ---
+            function hideDeleteModal() {
+                deleteModal.classList.add('opacity-0');
+                setTimeout(() => {
+                    deleteModal.classList.add('hidden');
+                    rowToDelete = null;
+                }, 300);
+            }
+
+            cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+            confirmDeleteBtn.addEventListener('click', function() {
+                if (rowToDelete) {
+                    rowToDelete.remove();
+                }
+                hideDeleteModal();
+            });
+
+            // --- Search Filter Logic ---
+            searchInput.addEventListener('keyup', function() {
+                const filter = searchInput.value.toUpperCase();
+                for (let i = 0; i < projectRows.length; i++) {
+                    const cells = projectRows[i].getElementsByTagName('td');
+                    let textValue = '';
+                    for (let j = 0; j < cells.length - 1; j++) { // Exclude action cell
+                        textValue += cells[j].textContent || cells[j].innerText;
+                    }
+                    if (textValue.toUpperCase().indexOf(filter) > -1) {
+                        projectRows[i].style.display = "";
+                    } else {
+                        projectRows[i].style.display = "none";
+                    }
+                }
             });
 
             // Show the initial page (login)
