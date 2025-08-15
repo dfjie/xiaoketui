@@ -36,6 +36,27 @@
             max-height: 1000px; /* Adjust as needed */
             opacity: 1;
         }
+        /* Toast Notification Styles */
+        #toast {
+            position: fixed;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 9999px;
+            background-color: #22c55e; /* green-500 */
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, transform 0.3s, top 0.3s;
+        }
+        #toast.show {
+            opacity: 1;
+            visibility: visible;
+            top: 100px;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -162,7 +183,7 @@
                 <div id="new-project-form-container" class="form-container">
                     <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg mb-8">
                         <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">登记新项目</h2>
-                        <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <form id="my-projects-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="po-company-name" class="block text-sm font-medium text-gray-700">公司名称</label>
                                 <input type="text" id="po-company-name" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
@@ -341,7 +362,7 @@
                 </div>
                 <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
                     <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">登记新项目</h2>
-                    <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <form id="add-project-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="new-company-name" class="block text-sm font-medium text-gray-700">公司名称</label>
                             <input type="text" id="new-company-name" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
@@ -505,6 +526,9 @@
         </section>
     </main>
     
+    <!-- Toast Notification -->
+    <div id="toast" class=""></div>
+
     <!-- Delete Confirmation Modal -->
     <div id="delete-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden opacity-0">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
@@ -524,12 +548,15 @@
             const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
             const header = document.getElementById('app-header');
             const loginForm = document.getElementById('login-form');
+            const myProjectsForm = document.getElementById('my-projects-form');
+            const addProjectForm = document.getElementById('add-project-form');
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const mainContent = document.getElementById('main-content');
             const addNewProjectBtn = document.getElementById('add-new-project-btn');
             const toggleNewProjectFormBtn = document.getElementById('toggle-new-project-form-btn');
             const newProjectFormContainer = document.getElementById('new-project-form-container');
+            const toast = document.getElementById('toast');
             
             // Avatar Dropdown Elements
             const avatarButton = document.getElementById('avatar-button');
@@ -545,9 +572,25 @@
             const searchInput = document.getElementById('project-search-input');
             const projectList = document.getElementById('internal-project-list');
             const projectRows = projectList.getElementsByClassName('project-row');
+            
+            // State for page history
+            let previousPage = 'internal-management';
+
+            // --- Toast Function ---
+            function showToast(message) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
 
             // Function to switch pages
-            function showPage(pageId) {
+            function showPage(pageId, fromPage = null) {
+                if ((pageId === 'internal-detail' || pageId === 'add-project') && fromPage) {
+                    previousPage = fromPage;
+                }
+                
                 // Hide all pages
                 pages.forEach(page => page.classList.add('hidden-page'));
 
@@ -602,17 +645,18 @@
 
                 // Click on a project row
                 if (projectRow) {
-                    // Check if the click was on a button inside the row
                     if (target.closest('.edit-btn') || target.closest('.delete-btn')) {
-                        return; // Do nothing if a button was clicked
+                        return; 
                     }
-                    showPage('internal-detail');
+                    const currentPageSection = target.closest('.page-section');
+                    const currentPageId = currentPageSection.id.replace('-page', '');
+                    showPage('internal-detail', currentPageId);
                     return;
                 }
                 
                 // Back to List Button
                 if (target.classList.contains('back-to-list-btn') || target.closest('.back-to-list-btn')) {
-                    showPage('internal-management');
+                    showPage(previousPage);
                 }
                 
                 // Delete Button
@@ -653,6 +697,24 @@
                 showPage('project-owner');
             });
 
+            // My Projects form submission
+            myProjectsForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // In a real app, you would handle form data here
+                myProjectsForm.reset();
+                newProjectFormContainer.classList.remove('visible');
+                showToast('提交成功');
+            });
+
+            // Add Project form submission
+            addProjectForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // In a real app, you would handle form data here
+                addProjectForm.reset();
+                showPage(previousPage);
+                showToast('提交成功');
+            });
+
             // Mobile menu toggle
             mobileMenuButton.addEventListener('click', function() {
                 mobileMenu.classList.toggle('hidden');
@@ -660,7 +722,7 @@
             
             // Add New Project Button (from internal management)
             addNewProjectBtn.addEventListener('click', function() {
-                showPage('add-project');
+                showPage('add-project', 'internal-management');
             });
             
             // Toggle New Project Form Button (on my projects page)
