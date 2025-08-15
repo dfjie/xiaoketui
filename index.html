@@ -279,6 +279,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">项目名称</th>
+                                    <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">项目所有者</th>
                                     <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预算金额</th>
                                     <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">开始日期</th>
                                     <th class="hidden lg:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">结束日期</th>
@@ -289,6 +290,7 @@
                             <tbody id="internal-project-list" class="bg-white divide-y divide-gray-200">
                                 <tr class="project-row hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">A公司年度医学峰会</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">Owner 1</td>
                                     <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥1,200,000</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-09-15</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-09-20</td>
@@ -300,6 +302,7 @@
                                 </tr>
                                 <tr class="project-row hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">B医院心脏手术直播</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">Owner 2</td>
                                     <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥300,000</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-08-20</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-08-20</td>
@@ -311,6 +314,7 @@
                                 </tr>
                                 <tr class="project-row hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">C公司新品发布会</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">Owner 1</td>
                                     <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥800,000</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-10-01</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-10-01</td>
@@ -322,6 +326,7 @@
                                 </tr>
                                 <tr class="project-row hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">D公司技术研讨会</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">Owner 3</td>
                                     <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥450,000</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-11-05</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-11-06</td>
@@ -333,6 +338,7 @@
                                 </tr>
                                 <tr class="project-row hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">E医疗集团培训直播</td>
+                                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">Owner 2</td>
                                     <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥150,000</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-07-15</td>
                                     <td class="hidden lg:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-07-15</td>
@@ -452,7 +458,7 @@
                     </div>
                     <div class="flex space-x-2 sm:space-x-4">
                         <button class="bg-blue-600 text-white px-4 py-2 text-sm sm:text-base sm:px-6 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold">提取到钱包</button>
-                        <button class="bg-gray-200 text-gray-800 px-4 py-2 text-sm sm:text-base sm:px-6 rounded-lg hover:bg-gray-300 transition duration-300 font-semibold">提取历史</button>
+                        <button id="history-btn" class="bg-gray-200 text-gray-800 px-4 py-2 text-sm sm:text-base sm:px-6 rounded-lg hover:bg-gray-300 transition duration-300 font-semibold">提取历史</button>
                     </div>
                 </div>
                 <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
@@ -461,21 +467,30 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日期</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">项目名称</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">确定利润/积分</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">剩余积分</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预估利润</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">预估积分</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">确定利润</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">确定积分</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-08-25</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">B医院心脏手术直播</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">¥100k / 10k</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">95,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥80,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">¥100,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">10,000</td>
                                 </tr>
                                 <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-07-10</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">C公司新品发布会</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">¥150k / 15k</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">85,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">¥150,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">¥150,000</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-semibold">15,000</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -507,8 +522,53 @@
                                 <p class="text-lg font-bold text-blue-600">积分总计: 43,000</p>
                             </div>
                             <div class="space-y-4">
-                                <div><h4 class="font-semibold text-gray-700">第一年</h4><ul class="list-disc list-inside text-gray-600 mt-2 text-sm"><li>项目名字1 - 利润: ¥150,000, 积分: 15,000</li><li>项目名字2 - 利润: ¥80,000, 积分: 8,000</li></ul></div>
-                                <div><h4 class="font-semibold text-gray-700">第二年</h4><ul class="list-disc list-inside text-gray-600 mt-2 text-sm"><li>项目名字3 - 利润: ¥200,000, 积分: 20,000</li></ul></div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 mb-2">第一年</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full text-sm">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left font-medium text-gray-500">项目名称</th>
+                                                    <th class="px-4 py-2 text-left font-medium text-gray-500">利润</th>
+                                                    <th class="px-4 py-2 text-left font-medium text-gray-500">积分</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                <tr>
+                                                    <td class="px-4 py-2">项目名字1</td>
+                                                    <td class="px-4 py-2">¥150,000</td>
+                                                    <td class="px-4 py-2">15,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2">项目名字2</td>
+                                                    <td class="px-4 py-2">¥80,000</td>
+                                                    <td class="px-4 py-2">8,000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 mb-2 mt-4">第二年</h4>
+                                     <div class="overflow-x-auto">
+                                        <table class="min-w-full text-sm">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left font-medium text-gray-500">项目名称</th>
+                                                    <th class="px-4 py-2 text-left font-medium text-gray-500">利润</th>
+                                                    <th class="px-4 py-2 text-left font-medium text-gray-500">积分</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                <tr>
+                                                    <td class="px-4 py-2">项目名字3</td>
+                                                    <td class="px-4 py-2">¥200,000</td>
+                                                    <td class="px-4 py-2">20,000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="border border-gray-200 p-6 rounded-lg">
@@ -517,7 +577,27 @@
                                 <p class="text-lg font-bold text-blue-600">积分总计: 30,000</p>
                             </div>
                             <div class="space-y-4">
-                                <div><h4 class="font-semibold text-gray-700">第一年</h4><ul class="list-disc list-inside text-gray-600 mt-2 text-sm"><li>项目名字A - 利润: ¥300,000, 积分: 30,000</li></ul></div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-700 mb-2">第一年</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full text-sm">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left font-medium text-gray-500">项目名称</th>
+                                                    <th class="px-4 py-2 text-left font-medium text-gray-500">利润</th>
+                                                    <th class="px-4 py-2 text-left font-medium text-gray-500">积分</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                                                <tr>
+                                                    <td class="px-4 py-2">项目名字A</td>
+                                                    <td class="px-4 py-2">¥300,000</td>
+                                                    <td class="px-4 py-2">30,000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -537,6 +617,42 @@
             <div class="flex justify-end space-x-4">
                 <button id="cancel-delete-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">取消</button>
                 <button id="confirm-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">确认删除</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- History Modal -->
+    <div id="history-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden opacity-0">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <div class="flex justify-between items-center mb-4">
+                 <h3 class="text-lg font-bold text-gray-900">提取历史</h3>
+                 <button id="close-history-btn" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">提取时间</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">提取积分</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">剩余积分</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-08-01</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">10,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">85,000</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-06-15</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">20,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">95,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+             <div class="text-right mt-6">
+                <button id="close-history-btn-2" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">关闭</button>
             </div>
         </div>
     </div>
@@ -567,6 +683,12 @@
             const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
             const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
             let rowToDelete = null;
+
+            // History Modal Elements
+            const historyModal = document.getElementById('history-modal');
+            const historyBtn = document.getElementById('history-btn');
+            const closeHistoryBtn = document.getElementById('close-history-btn');
+            const closeHistoryBtn2 = document.getElementById('close-history-btn-2');
 
             // Search functionality
             const searchInput = document.getElementById('project-search-input');
@@ -772,6 +894,20 @@
                 }
                 hideDeleteModal();
             });
+
+            // --- History Modal Logic ---
+            function showHistoryModal() {
+                historyModal.classList.remove('hidden');
+                setTimeout(() => historyModal.classList.remove('opacity-0'), 10);
+            }
+            function hideHistoryModal() {
+                historyModal.classList.add('opacity-0');
+                setTimeout(() => historyModal.classList.add('hidden'), 300);
+            }
+            historyBtn.addEventListener('click', showHistoryModal);
+            closeHistoryBtn.addEventListener('click', hideHistoryModal);
+            closeHistoryBtn2.addEventListener('click', hideHistoryModal);
+
 
             // --- Search Filter Logic ---
             searchInput.addEventListener('keyup', function() {
